@@ -5,7 +5,7 @@ export default function Footer() {
     <footer>
       <div className="footer-inner">
         <div className="footer-logo">
-          <img src="/src/assets/logo.png" alt="EvalPraxis Logo" />
+          <img src="/assets/logo.png" alt="EvalPraxis Logo" />
         </div>
         <div className="footer-info">
           <p>© 2025 <span>EvalPraxis</span> — Cabinet d'Étude, de Conseil et de Formation en Suivi-Évaluation</p>
