@@ -9,7 +9,7 @@ export default function About() {
         <div className="divider"></div>
         <div className="about-grid">
           <div className="about-text">
-            <p>EvalPraxis est un <strong>Cabinet d'Étude, de Conseil et de Formation</strong> qui travaille exclusivement dans le Suivi-Évaluation de projets/programmes et le renforcement de capacités dans le domaine.</p>
+            <p>EvalPraxis est un <strong>Cabinet d'Étude, de Conseils et de Formation</strong> qui travaille exclusivement dans le Suivi-Évaluation de projets/programmes et le renforcement de capacités dans le domaine.</p>
             <p>Notre mission principale est de collaborer avec les entreprises, les ONG, les structures ou administrations publiques ou privées dans le cadre de la mise en place d'un système fiable et efficace de suivi, supervision et évaluation des activités de leurs projets.</p>
             <p>Nous répondons également aux besoins en qualification des jeunes diplômés pour une meilleure insertion professionnelle dans le secteur.</p>
             <p>Notre équipe aux <strong>compétences pluridisciplinaires</strong> propose des services de formation, de consulting, d'étude, de suivi et évaluation de projets/programmes aux particuliers, structures et administrations publiques ou privées.</p>

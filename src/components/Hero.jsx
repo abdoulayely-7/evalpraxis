@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section className="hero" style={{backgroundImage: `url(${heroBg})`}}>
       <div className="hero-inner">
-        <div className="hero-badge">Cabinet d'Étude · Conseil · Formation en Suivi-Évaluation</div>
+        <div className="hero-badge">Cabinet d'Étude · Conseils · Formation en Suivi-Évaluation</div>
         <h1>Expertise. Rigueur.<br /><span>Impact mesurable.</span></h1>
         <p className="hero-slogan">Votre partenaire en suivi-évaluation stratégique</p>
         <div className="hero-btns">
