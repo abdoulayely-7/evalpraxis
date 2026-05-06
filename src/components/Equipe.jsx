@@ -11,7 +11,7 @@ export default function Equipe() {
   return (
     <section id="equipe" style={{background: 'var(--bg)'}}>
       <div className="container">
-        <div className="section-label">Les personnes derrière EvalPraxis</div>
+        <div className="section-label">Les personnes derrière EvalPrx</div>
         <h2 className="section-title">Notre équipe</h2>
         <div className="divider"></div>
         <p className="section-sub">Une équipe pluridisciplinaire unie par la même passion : rendre le suivi-évaluation accessible, rigoureux et utile.</p>

@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function Temoignages() {
   const temoignages = [
-    { name: "Aminata M.", role: "Coordinatrice de programme, ONG nationale", initials: "AM", text: "EvalPraxis a transformé notre approche du suivi de projet. Leur méthodologie rigoureuse et leur accompagnement terrain ont été décisifs." },
-    { name: "Boubacar K.", role: "Responsable M&E, Administration publique", initials: "BK", text: "La formation suivie avec EvalPraxis nous a permis de mieux structurer nos indicateurs et de produire des rapports qui répondent aux standards des bailleurs." },
+    { name: "Aminata M.", role: "Coordinatrice de programme, ONG nationale", initials: "AM", text: "EvalPrx a transformé notre approche du suivi de projet. Leur méthodologie rigoureuse et leur accompagnement terrain ont été décisifs." },
+    { name: "Boubacar K.", role: "Responsable M&E, Administration publique", initials: "BK", text: "La formation suivie avec EvalPrx nous a permis de mieux structurer nos indicateurs et de produire des rapports qui répondent aux standards des bailleurs." },
     { name: "Fatou C.", role: "Directrice, Structure privée de développement", initials: "FC", text: "Un cabinet sérieux, disponible et à l'écoute. Leurs recommandations ont amélioré notre dispositif de pilotage." }
   ];
 

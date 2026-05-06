@@ -8,7 +8,7 @@ export default function Nav() {
   return (
     <nav>
       <div className="nav-inner">
-        <img src={Logo} alt="EvalPraxis" className="logo-img" />
+        <img src={Logo} alt="EvalPrx" className="logo-img" />
         <div className="nav-links">
           <a href="#about">À propos</a>
           <a href="#services">Services</a>
