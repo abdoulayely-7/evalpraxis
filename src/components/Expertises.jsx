@@ -38,7 +38,7 @@ export default function Expertises() {
           </div>
           <div className="exp-card">
             <h3>Expertise Formation & Insertion professionnelle</h3>
-            <p style={{color: '#fff'}}>EvalPrx a mis en place un dispositif d'accompagnement pédagogique et d'évaluation qui aide les apprenants à définir leurs objectifs.</p>
+            <p style={{color: '#fff'}}>EvalPraxis a mis en place un dispositif d'accompagnement pédagogique et d'évaluation qui aide les apprenants à définir leurs objectifs.</p>
             <div className="exp-phase">
               <h4>Programmes de formation proposés</h4>
               <ul className="exp-list">

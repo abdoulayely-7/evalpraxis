@@ -65,7 +65,7 @@ export default function Contact() {
               </div>
               <div>
                 <h5>Email</h5>
-                <p><a href="mailto:contact@EvalPrx.org">contact@EvalPrx.org</a></p>
+                <p><a href="mailto:contact@EvalPraxis.org">contact@EvalPraxis.org</a></p>
               </div>
             </div>
             <div className="contact-item">
@@ -86,7 +86,7 @@ export default function Contact() {
                 <p>Lundi – Vendredi : 8h00 – 18h00</p>
               </div>
             </div>
-            <a href="https://wa.me/221776434535?text=Bonjour%20EvalPrx%2C%20je%20souhaite%20en%20savoir%20plus%20sur%20vos%20services." className="btn-primary" style={{marginTop: '1rem', display: 'inline-flex', alignItems: 'center', gap: '8px'}}>
+            <a href="https://wa.me/221776434535?text=Bonjour%20EvalPraxis%2C%20je%20souhaite%20en%20savoir%20plus%20sur%20vos%20services." className="btn-primary" style={{marginTop: '1rem', display: 'inline-flex', alignItems: 'center', gap: '8px'}}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               Contactez-nous sur WhatsApp
             </a>
