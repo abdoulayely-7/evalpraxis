@@ -10,7 +10,8 @@ const initialForm = {
   message: '',
 };
 
-const contactEndpoint = import.meta.env.VITE_MAIL_API_URL || '/api/contact';
+const mailApiUrl = import.meta.env.VITE_MAIL_API_URL?.replace(/\/$/, '');
+const contactEndpoint = mailApiUrl ? `${mailApiUrl}/contact` : '/api/contact';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const phonePattern = /^\+?[0-9\s().-]{8,20}$/;
