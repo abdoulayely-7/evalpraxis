@@ -1,4 +1,3 @@
-import React from 'react';
 import heroBg from '../assets/hero-bg.jpg';
 
 export default function Hero() {

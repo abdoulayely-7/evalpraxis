@@ -1,4 +1,3 @@
-import React from 'react';
 import { CheckCircle, Building2, BookOpen, BarChart3, Users, Monitor } from 'lucide-react';
 
 export default function Services() {

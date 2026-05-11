@@ -1,9 +1,9 @@
-import React from 'react';
-import { Menu, X, MapPin, Mail, Phone, Clock, Send } from 'lucide-react';
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 import Logo from '../assets/logo.png';
 
 export default function Nav() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <nav>

@@ -1,7 +1,144 @@
-import React from 'react';
+import { useState } from 'react';
 import { MapPin, Mail, Phone, Clock } from 'lucide-react';
 
+const initialForm = {
+  fullName: '',
+  organization: '',
+  email: '',
+  phone: '',
+  service: '',
+  message: '',
+};
+
+const contactEndpoint = import.meta.env.VITE_MAIL_API_URL || '/api/contact';
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const phonePattern = /^\+?[0-9\s().-]{8,20}$/;
+
+const validateContactForm = (values) => {
+  const errors = {};
+  const fullName = values.fullName.trim();
+  const organization = values.organization.trim();
+  const email = values.email.trim();
+  const phone = values.phone.trim();
+  const service = values.service.trim();
+  const message = values.message.trim();
+
+  if (!fullName) {
+    errors.fullName = 'Le nom complet est obligatoire.';
+  } else if (fullName.length < 2) {
+    errors.fullName = 'Le nom doit contenir au moins 2 caractères.';
+  }
+
+  if (organization && organization.length < 2) {
+    errors.organization = "L'organisation doit contenir au moins 2 caractères.";
+  }
+
+  if (!email) {
+    errors.email = "L'adresse email est obligatoire.";
+  } else if (!emailPattern.test(email)) {
+    errors.email = 'Veuillez saisir une adresse email valide.';
+  }
+
+  if (!phone) {
+    errors.phone = 'Le téléphone est obligatoire.';
+  } else if (!phonePattern.test(phone)) {
+    errors.phone = 'Veuillez saisir un numéro de téléphone valide.';
+  }
+
+  if (!service) {
+    errors.service = 'Veuillez sélectionner un service.';
+  }
+
+  if (!message) {
+    errors.message = 'Le message est obligatoire.';
+  } else if (message.length < 10) {
+    errors.message = 'Le message doit contenir au moins 10 caractères.';
+  }
+
+  return errors;
+};
+
 export default function Contact() {
+  const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState({ type: 'idle', message: '' });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+    setStatus((current) => current.type === 'error' ? { type: 'idle', message: '' } : current);
+    setErrors((current) => {
+      if (!current[name]) {
+        return current;
+      }
+
+      const nextErrors = validateContactForm({ ...form, [name]: value });
+      return { ...current, [name]: nextErrors[name] };
+    });
+  };
+
+  const handleBlur = (event) => {
+    const { name } = event.target;
+    const nextErrors = validateContactForm(form);
+    setErrors((current) => ({ ...current, [name]: nextErrors[name] }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const nextErrors = validateContactForm(form);
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) {
+      setStatus({
+        type: 'error',
+        message: 'Veuillez corriger les champs signalés avant l’envoi.',
+      });
+      return;
+    }
+
+    setStatus({ type: 'loading', message: 'Envoi du message...' });
+
+    try {
+      const response = await fetch(contactEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...form,
+          fullName: form.fullName.trim(),
+          organization: form.organization.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          service: form.service.trim(),
+          message: form.message.trim(),
+        }),
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.message || "Le message n'a pas pu être envoyé.");
+      }
+
+      setForm(initialForm);
+      setErrors({});
+      setStatus({
+        type: 'success',
+        message: result.message || 'Votre message a bien été envoyé.',
+      });
+    } catch (error) {
+      setStatus({
+        type: 'error',
+        message: error.message || "Une erreur est survenue pendant l'envoi.",
+      });
+    }
+  };
+
+  const isSubmitting = status.type === 'loading';
+
   return (
     <section className="contact" id="contact">
       <div className="container">
@@ -10,44 +147,119 @@ export default function Contact() {
         <div className="divider"></div>
         <p className="section-sub">Vous avez un projet, une question ou souhaitez un devis ? Notre équipe vous répond dans les meilleurs délais.</p>
         <div className="contact-grid">
-          <div className="contact-form">
+          <form className="contact-form" onSubmit={handleSubmit} noValidate>
             <div className="form-row">
               <div className="form-group">
-                <label>Nom complet</label>
-                <input type="text" placeholder="Votre nom et prénom" />
+                <label htmlFor="fullName">Nom complet</label>
+                <input
+                  id="fullName"
+                  name="fullName"
+                  type="text"
+                  placeholder="Votre nom et prénom"
+                  value={form.fullName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-invalid={Boolean(errors.fullName)}
+                  aria-describedby={errors.fullName ? 'fullName-error' : undefined}
+                />
+                {errors.fullName && <span className="field-error" id="fullName-error">{errors.fullName}</span>}
               </div>
               <div className="form-group">
-                <label>Organisation</label>
-                <input type="text" placeholder="Votre structure" />
+                <label htmlFor="organization">Organisation</label>
+                <input
+                  id="organization"
+                  name="organization"
+                  type="text"
+                  placeholder="Votre structure"
+                  value={form.organization}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-invalid={Boolean(errors.organization)}
+                  aria-describedby={errors.organization ? 'organization-error' : undefined}
+                />
+                {errors.organization && <span className="field-error" id="organization-error">{errors.organization}</span>}
               </div>
             </div>
             <div className="form-group">
-              <label>Email</label>
-              <input type="email" placeholder="votre@email.com" />
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="votre@email.com"
+                value={form.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'email-error' : undefined}
+              />
+              {errors.email && <span className="field-error" id="email-error">{errors.email}</span>}
             </div>
             <div className="form-group">
-              <label>Téléphone</label>
-              <input type="tel" placeholder="+221 XX XXX XX XX" />
+              <label htmlFor="phone">Téléphone</label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="+221 XX XXX XX XX"
+                value={form.phone}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                aria-invalid={Boolean(errors.phone)}
+                aria-describedby={errors.phone ? 'phone-error' : undefined}
+              />
+              {errors.phone && <span className="field-error" id="phone-error">{errors.phone}</span>}
             </div>
             <div className="form-group">
-              <label>Type de service souhaité</label>
-              <select>
+              <label htmlFor="service">Type de service souhaité</label>
+              <select
+                id="service"
+                name="service"
+                value={form.service}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                aria-invalid={Boolean(errors.service)}
+                aria-describedby={errors.service ? 'service-error' : undefined}
+              >
                 <option value="">— Sélectionner —</option>
-                <option>Suivi & Évaluation de projets</option>
-                <option>Conseil aux organisations</option>
-                <option>Formation professionnelle</option>
-                <option>Études & Recherches</option>
-                <option>Renforcement de capacités</option>
-                <option>Infrastructure & Outils digitaux</option>
-                <option>Autre</option>
+                <option value="Suivi & Évaluation de projets">Suivi & Évaluation de projets</option>
+                <option value="Conseil aux organisations">Conseil aux organisations</option>
+                <option value="Formation professionnelle">Formation professionnelle</option>
+                <option value="Études & Recherches">Études & Recherches</option>
+                <option value="Renforcement de capacités">Renforcement de capacités</option>
+                <option value="Infrastructure & Outils digitaux">Infrastructure & Outils digitaux</option>
+                <option value="Autre">Autre</option>
               </select>
+              {errors.service && <span className="field-error" id="service-error">{errors.service}</span>}
             </div>
             <div className="form-group">
-              <label>Message</label>
-              <textarea placeholder="Décrivez votre besoin ou votre projet..."></textarea>
+              <label htmlFor="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Décrivez votre besoin ou votre projet..."
+                value={form.message}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={errors.message ? 'message-error' : undefined}
+              ></textarea>
+              {errors.message && <span className="field-error" id="message-error">{errors.message}</span>}
             </div>
-            <button className="btn-primary" style={{alignSelf: 'flex-start', border: 'none', cursor: 'pointer', fontSize: '14px'}}>Envoyer le message →</button>
-          </div>
+            {status.message && (
+              <p className={`form-status form-status-${status.type}`} role="status">
+                {status.message}
+              </p>
+            )}
+            <button
+              className="btn-primary"
+              type="submit"
+              disabled={isSubmitting}
+              style={{alignSelf: 'flex-start', border: 'none', cursor: isSubmitting ? 'wait' : 'pointer', fontSize: '14px'}}
+            >
+              {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message →'}
+            </button>
+          </form>
           <div className="contact-info">
            
             <div className="contact-item">
@@ -65,7 +277,7 @@ export default function Contact() {
               </div>
               <div>
                 <h5>Email</h5>
-                <p><a href="mailto:contact@EvalPraxis.org">contact@evalprx.org</a></p>
+                <p><a href="mailto:contact@evalprx.org">contact@evalprx.org</a></p>
               </div>
             </div>
             <div className="contact-item">
