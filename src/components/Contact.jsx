@@ -224,6 +224,7 @@ export default function Contact() {
                 >
                   <option value="">— Sélectionner —</option>
                   <optgroup label="Pour les Ministères et Agences publiques">
+                    <option disabled aria-hidden="true" value="service-gap-ministeres">&nbsp;</option>
                     <option value="Élaboration ou révision de cadres logiques et théories du changement">Élaboration ou révision de cadres logiques et théories du changement</option>
                     <option value="Mise en place de systèmes de suivi-évaluation institutionnels">Mise en place de systèmes de suivi-évaluation institutionnels</option>
                     <option value="Définition de cadres de performance (KPIs, indicateurs sectoriels)">Définition de cadres de performance (KPIs, indicateurs sectoriels)</option>
@@ -234,6 +235,7 @@ export default function Contact() {
                     <option value="Renforcement de capacités (formations ciblées pour agents de suivi-évaluation)">Renforcement de capacités (formations ciblées pour agents de suivi-évaluation)</option>
                   </optgroup>
                   <optgroup label="Pour les Collectivités locales/Communes/Conseils départementaux et régionaux">
+                    <option disabled aria-hidden="true" value="service-gap-collectivites">&nbsp;</option>
                     <option value="Mise en place de dispositifs de suivi simples (fiches de suivi, registres, canevas)">Mise en place de dispositifs de suivi simples (fiches de suivi, registres, canevas)</option>
                     <option value="Diagnostic territorial / diagnostic participatif">Diagnostic territorial / diagnostic participatif</option>
                     <option value="Formation des agents communaux et élus sur le suivi-évaluation et la redevabilité">Formation des agents communaux et élus sur le suivi-évaluation et la redevabilité</option>
@@ -242,6 +244,7 @@ export default function Contact() {
                     <option value="Analyse et visualisation des données">Analyse et visualisation des données</option>
                   </optgroup>
                   <optgroup label="Pour les ONGs">
+                    <option disabled aria-hidden="true" value="service-gap-ongs">&nbsp;</option>
                     <option value="Évaluations externes : base, mi-parcours, finale, capitalisation">Évaluations externes : base, mi-parcours, finale, capitalisation</option>
                     <option value="Élaboration de plans suivi-évaluation et outils de collecte des données">Élaboration de plans suivi-évaluation et outils de collecte des données</option>
                     <option value="Digitalisation de la collecte de données (KoboToolbox, ODK, SurveyCTO)">Digitalisation de la collecte de données (KoboToolbox, ODK, SurveyCTO)</option>
@@ -253,6 +256,7 @@ export default function Contact() {
                     <option value="Coaching du responsable du suivi-évaluation et renforcement de l’équipe terrain">Coaching du responsable du suivi-évaluation et renforcement de l’équipe terrain</option>
                   </optgroup>
                   <optgroup label="Pour les Associations de développement communautaire / Organisations locales">
+                    <option disabled aria-hidden="true" value="service-gap-associations">&nbsp;</option>
                     <option value="Conception d’un dispositif de suivi-évaluation simplifié (adapté au terrain)">Conception d’un dispositif de suivi-évaluation simplifié (adapté au terrain)</option>
                     <option value="Élaboration d’indicateurs simples (réalisations, bénéficiaires, changements)">Élaboration d’indicateurs simples (réalisations, bénéficiaires, changements)</option>
                     <option value="Appui à la collecte de données communautaires">Appui à la collecte de données communautaires</option>
@@ -263,6 +267,7 @@ export default function Contact() {
                     <option value="Capitalisation des histoires de changement (« Most Significant Change »)">Capitalisation des histoires de changement (« Most Significant Change »)</option>
                   </optgroup>
                   <optgroup label="Pour Individus / Consultants / Professionnels (freelance, cadres projet, agents de suivi-évaluation)">
+                    <option disabled aria-hidden="true" value="service-gap-individus">&nbsp;</option>
                     <option value="Formations professionnelles (suivi-évaluation, GAR, indicateurs SMART)">Formations professionnelles (suivi-évaluation, GAR, indicateurs SMART)</option>
                     <option value="Coaching individuel">Coaching individuel</option>
                     <option value="Modèles prêts à l’emploi : cadre logique, plan de suivi-évaluation">Modèles prêts à l’emploi : cadre logique, plan de suivi-évaluation</option>
