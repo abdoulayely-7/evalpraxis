@@ -211,28 +211,69 @@ export default function Contact() {
               />
               {errors.phone && <span className="field-error" id="phone-error">{errors.phone}</span>}
             </div>
-            <div className="form-group">
-              <label htmlFor="service">Type de service souhaité</label>
-              <select
-                id="service"
-                name="service"
-                value={form.service}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                aria-invalid={Boolean(errors.service)}
-                aria-describedby={errors.service ? 'service-error' : undefined}
-              >
-                <option value="">— Sélectionner —</option>
-                <option value="Suivi & Évaluation de projets">Suivi & Évaluation de projets</option>
-                <option value="Conseil aux organisations">Conseil aux organisations</option>
-                <option value="Formation professionnelle">Formation professionnelle</option>
-                <option value="Études & Recherches">Études & Recherches</option>
-                <option value="Renforcement de capacités">Renforcement de capacités</option>
-                <option value="Infrastructure & Outils digitaux">Infrastructure & Outils digitaux</option>
-                <option value="Autre">Autre</option>
-              </select>
-              {errors.service && <span className="field-error" id="service-error">{errors.service}</span>}
-            </div>
+<div className="form-group">
+                <label htmlFor="service">Type de service souhaité</label>
+                <select
+                  id="service"
+                  name="service"
+                  value={form.service}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-invalid={Boolean(errors.service)}
+                  aria-describedby={errors.service ? 'service-error' : undefined}
+                >
+                  <option value="">— Sélectionner —</option>
+                  <optgroup label="Pour les Ministères et Agences publiques">
+                    <option value="Élaboration ou révision de cadres logiques et théories du changement">Élaboration ou révision de cadres logiques et théories du changement</option>
+                    <option value="Mise en place de systèmes de suivi-évaluation institutionnels">Mise en place de systèmes de suivi-évaluation institutionnels</option>
+                    <option value="Définition de cadres de performance (KPIs, indicateurs sectoriels)">Définition de cadres de performance (KPIs, indicateurs sectoriels)</option>
+                    <option value="Évaluations : étude de base, mi-parcours, finale, impact">Évaluations : étude de base, mi-parcours, finale, impact</option>
+                    <option value="Conception de plans de suivi-évaluation et manuels de procédures">Conception de plans de suivi-évaluation et manuels de procédures</option>
+                    <option value="Collecte de données à grande échelle (enquêtes, audits de données)">Collecte de données à grande échelle (enquêtes, audits de données)</option>
+                    <option value="Développement de tableaux de bord (Power BI, Excel, Kobo/ODK)">Développement de tableaux de bord (Power BI, Excel, Kobo/ODK)</option>
+                    <option value="Renforcement de capacités (formations ciblées pour agents de suivi-évaluation)">Renforcement de capacités (formations ciblées pour agents de suivi-évaluation)</option>
+                  </optgroup>
+                  <optgroup label="Pour les Collectivités locales/Communes/Conseils départementaux et régionaux">
+                    <option value="Mise en place de dispositifs de suivi simples (fiches de suivi, registres, canevas)">Mise en place de dispositifs de suivi simples (fiches de suivi, registres, canevas)</option>
+                    <option value="Diagnostic territorial / diagnostic participatif">Diagnostic territorial / diagnostic participatif</option>
+                    <option value="Formation des agents communaux et élus sur le suivi-évaluation et la redevabilité">Formation des agents communaux et élus sur le suivi-évaluation et la redevabilité</option>
+                    <option value="Conception de bases de données locales (projets, infrastructures, bénéficiaires)">Conception de bases de données locales (projets, infrastructures, bénéficiaires)</option>
+                    <option value="Évaluations participatives (bénéficiaires, focus groups, scorecards)">Évaluations participatives (bénéficiaires, focus groups, scorecards)</option>
+                    <option value="Analyse et visualisation des données">Analyse et visualisation des données</option>
+                  </optgroup>
+                  <optgroup label="Pour les ONGs">
+                    <option value="Évaluations externes : base, mi-parcours, finale, capitalisation">Évaluations externes : base, mi-parcours, finale, capitalisation</option>
+                    <option value="Élaboration de plans suivi-évaluation et outils de collecte des données">Élaboration de plans suivi-évaluation et outils de collecte des données</option>
+                    <option value="Digitalisation de la collecte de données (KoboToolbox, ODK, SurveyCTO)">Digitalisation de la collecte de données (KoboToolbox, ODK, SurveyCTO)</option>
+                    <option value="Développement de tableaux de bord et reporting automatisé">Développement de tableaux de bord et reporting automatisé</option>
+                    <option value="Appui à la gestion axée sur les résultats (GAR/RBM)">Appui à la gestion axée sur les résultats (GAR/RBM)</option>
+                    <option value="Études qualitatives (KII, FGD, études de cas)">Études qualitatives (KII, FGD, études de cas)</option>
+                    <option value="Analyse et visualisation des données">Analyse et visualisation des données</option>
+                    <option value="Capitalisation et documentation de bonnes pratiques">Capitalisation et documentation de bonnes pratiques</option>
+                    <option value="Coaching du responsable du suivi-évaluation et renforcement de l’équipe terrain">Coaching du responsable du suivi-évaluation et renforcement de l’équipe terrain</option>
+                  </optgroup>
+                  <optgroup label="Pour les Associations de développement communautaire / Organisations locales">
+                    <option value="Conception d’un dispositif de suivi-évaluation simplifié (adapté au terrain)">Conception d’un dispositif de suivi-évaluation simplifié (adapté au terrain)</option>
+                    <option value="Élaboration d’indicateurs simples (réalisations, bénéficiaires, changements)">Élaboration d’indicateurs simples (réalisations, bénéficiaires, changements)</option>
+                    <option value="Appui à la collecte de données communautaires">Appui à la collecte de données communautaires</option>
+                    <option value="Formation et coaching pratiques (comment suivre, comment remplir des fiches)">Formation et coaching pratiques (comment suivre, comment remplir des fiches)</option>
+                    <option value="Mise en place de fiches de suivi et registres bénéficiaires">Mise en place de fiches de suivi et registres bénéficiaires</option>
+                    <option value="Analyse et visualisation des données">Analyse et visualisation des données</option>
+                    <option value="Appui à la rédaction de rapports narratifs et financiers liés aux résultats">Appui à la rédaction de rapports narratifs et financiers liés aux résultats</option>
+                    <option value="Capitalisation des histoires de changement (« Most Significant Change »)">Capitalisation des histoires de changement (« Most Significant Change »)</option>
+                  </optgroup>
+                  <optgroup label="Pour Individus / Consultants / Professionnels (freelance, cadres projet, agents de suivi-évaluation)">
+                    <option value="Formations professionnelles (suivi-évaluation, GAR, indicateurs SMART)">Formations professionnelles (suivi-évaluation, GAR, indicateurs SMART)</option>
+                    <option value="Coaching individuel">Coaching individuel</option>
+                    <option value="Modèles prêts à l’emploi : cadre logique, plan de suivi-évaluation">Modèles prêts à l’emploi : cadre logique, plan de suivi-évaluation</option>
+                    <option value="Formation et paramétrage KoboToolbox / ODK">Formation et paramétrage KoboToolbox / ODK</option>
+                    <option value="Création de dashboards et reporting automatisé">Création de dashboards et reporting automatisé</option>
+                    <option value="Appui à la rédaction de TDR d’évaluation">Appui à la rédaction de TDR d’évaluation</option>
+                    <option value="Mentorat sur la conduite d’évaluations (plan d’échantillonnage, analyse et visualisation des données)">Mentorat sur la conduite d’évaluations (plan d’échantillonnage, analyse et visualisation des données)</option>
+                  </optgroup>
+                </select>
+                {errors.service && <span className="field-error" id="service-error">{errors.service}</span>}
+              </div>
             <div className="form-group">
               <label htmlFor="message">Message</label>
               <textarea
