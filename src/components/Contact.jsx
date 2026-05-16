@@ -6,9 +6,75 @@ const initialForm = {
   organization: '',
   email: '',
   phone: '',
-  service: '',
+  service: [],
   message: '',
 };
+
+const serviceGroups = [
+  {
+    label: 'Pour les Ministères et Agences publiques',
+    options: [
+      'Élaboration ou révision de cadres logiques et théories du changement',
+      'Mise en place de systèmes de suivi-évaluation institutionnels',
+      'Définition de cadres de performance (KPIs, indicateurs sectoriels)',
+      'Évaluations : étude de base, mi-parcours, finale, impact',
+      'Conception de plans de suivi-évaluation et manuels de procédures',
+      'Collecte de données à grande échelle (enquêtes, audits de données)',
+      'Développement de tableaux de bord (Power BI, Excel, Kobo/ODK)',
+      'Renforcement de capacités (formations ciblées pour agents de suivi-évaluation)',
+    ],
+  },
+  {
+    label: 'Pour les Collectivités locales/Communes/Conseils départementaux et régionaux',
+    options: [
+      'Mise en place de dispositifs de suivi simples (fiches de suivi, registres, canevas)',
+      'Diagnostic territorial / diagnostic participatif',
+      'Formation des agents communaux et élus sur le suivi-évaluation et la redevabilité',
+      'Conception de bases de données locales (projets, infrastructures, bénéficiaires)',
+      'Évaluations participatives (bénéficiaires, focus groups, scorecards)',
+      'Analyse et visualisation des données',
+    ],
+  },
+  {
+    label: 'Pour les ONGs',
+    options: [
+      'Évaluations externes : base, mi-parcours, finale, capitalisation',
+      'Élaboration de plans suivi-évaluation et outils de collecte des données',
+      'Digitalisation de la collecte de données (KoboToolbox, ODK, SurveyCTO)',
+      'Développement de tableaux de bord et reporting automatisé',
+      'Appui à la gestion axée sur les résultats (GAR/RBM)',
+      'Études qualitatives (KII, FGD, études de cas)',
+      'Analyse et visualisation des données',
+      'Capitalisation et documentation de bonnes pratiques',
+      'Coaching du responsable du suivi-évaluation et renforcement de l’équipe terrain',
+    ],
+  },
+  {
+    label: 'Pour les Associations de développement communautaire / Organisations locales',
+    options: [
+      'Conception d’un dispositif de suivi-évaluation simplifié (adapté au terrain)',
+      'Élaboration d’indicateurs simples (réalisations, bénéficiaires, changements)',
+      'Appui à la collecte de données communautaires',
+      'Formation et coaching pratiques (comment suivre, comment remplir des fiches)',
+      'Mise en place de fiches de suivi et registres bénéficiaires',
+      'Analyse et visualisation des données',
+      'Appui à la rédaction de rapports narratifs et financiers liés aux résultats',
+      'Capitalisation des histoires de changement (« Most Significant Change »)',
+    ],
+  },
+  {
+    label: 'Pour Individus / Consultants / Professionnels (freelance, cadres projet, agents de suivi-évaluation)',
+    options: [
+      'Formations professionnelles (suivi-évaluation, GAR, indicateurs SMART)',
+      'Coaching individuel',
+      'Modèles prêts à l’emploi : cadre logique, plan de suivi-évaluation',
+      'Formation et paramétrage KoboToolbox / ODK',
+      'Création de dashboards et reporting automatisé',
+      'Appui à la rédaction de TDR d’évaluation',
+      'Mentorat sur la conduite d’évaluations (plan d’échantillonnage, analyse et visualisation des données)',
+    ],
+  },
+];
 
 const mailApiUrl = import.meta.env.VITE_MAIL_API_URL?.replace(/\/$/, '');
 const contactEndpoint = mailApiUrl ? `${mailApiUrl}/contact` : '/api/contact';
@@ -22,7 +88,7 @@ const validateContactForm = (values) => {
   const organization = values.organization.trim();
   const email = values.email.trim();
   const phone = values.phone.trim();
-  const service = values.service.trim();
+  const service = values.service;
   const message = values.message.trim();
 
   if (!fullName) {
@@ -47,8 +113,10 @@ const validateContactForm = (values) => {
     errors.phone = 'Veuillez saisir un numéro de téléphone valide.';
   }
 
-  if (!service) {
-    errors.service = 'Veuillez sélectionner un service.';
+  if (service.length === 0) {
+    errors.service = 'Veuillez sélectionner au moins un service.';
+  } else if (service.length > 3) {
+    errors.service = 'Vous pouvez sélectionner jusqu’à 3 services maximum.';
   }
 
   if (!message) {
@@ -77,6 +145,23 @@ export default function Contact() {
       const nextErrors = validateContactForm({ ...form, [name]: value });
       return { ...current, [name]: nextErrors[name] };
     });
+  };
+
+  const handleServiceToggle = (service) => {
+    setForm((current) => {
+      const isSelected = current.service.includes(service);
+      const nextServices = isSelected
+        ? current.service.filter((item) => item !== service)
+        : [...current.service, service].slice(0, 3);
+
+      setErrors((currentErrors) => ({
+        ...currentErrors,
+        service: nextServices.length === 0 ? currentErrors.service : undefined,
+      }));
+
+      return { ...current, service: nextServices };
+    });
+    setStatus((current) => current.type === 'error' ? { type: 'idle', message: '' } : current);
   };
 
   const handleBlur = (event) => {
@@ -113,7 +198,7 @@ export default function Contact() {
           organization: form.organization.trim(),
           email: form.email.trim(),
           phone: form.phone.trim(),
-          service: form.service.trim(),
+          service: form.service.join(', '),
           message: form.message.trim(),
         }),
       });
@@ -139,6 +224,12 @@ export default function Contact() {
   };
 
   const isSubmitting = status.type === 'loading';
+  const selectedServicesCount = form.service.length;
+  const hasReachedServiceLimit = selectedServicesCount >= 3;
+  const remainingServicesCount = 3 - selectedServicesCount;
+  const serviceHelpText = hasReachedServiceLimit
+    ? '3 services sélectionnés. Décochez un service pour en choisir un autre.'
+    : `Choisissez jusqu’à 3 services. ${remainingServicesCount} choix restant${remainingServicesCount > 1 ? 's' : ''}.`;
 
   return (
     <section className="contact" id="contact">
@@ -211,72 +302,48 @@ export default function Contact() {
               />
               {errors.phone && <span className="field-error" id="phone-error">{errors.phone}</span>}
             </div>
-<div className="form-group">
-                <label htmlFor="service">Type de service souhaité</label>
-                <select
-                  id="service"
-                  name="service"
-                  value={form.service}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+              <div className="form-group">
+                <div className="service-field-header">
+                  <label id="service-label">Types de services souhaités</label>
+                  <span className="service-counter">{selectedServicesCount}/3</span>
+                </div>
+                <p className="service-help" id="service-help" aria-live="polite">{serviceHelpText}</p>
+                <div
+                  className="service-options"
+                  role="group"
+                  aria-labelledby="service-label"
+                  aria-describedby={errors.service ? 'service-help service-error' : 'service-help'}
                   aria-invalid={Boolean(errors.service)}
-                  aria-describedby={errors.service ? 'service-error' : undefined}
                 >
-                  <option value="">— Sélectionner —</option>
-                  <optgroup label="Pour les Ministères et Agences publiques">
-                    <option disabled aria-hidden="true" value="service-gap-ministeres">&nbsp;</option>
-                    <option value="Élaboration ou révision de cadres logiques et théories du changement">Élaboration ou révision de cadres logiques et théories du changement</option>
-                    <option value="Mise en place de systèmes de suivi-évaluation institutionnels">Mise en place de systèmes de suivi-évaluation institutionnels</option>
-                    <option value="Définition de cadres de performance (KPIs, indicateurs sectoriels)">Définition de cadres de performance (KPIs, indicateurs sectoriels)</option>
-                    <option value="Évaluations : étude de base, mi-parcours, finale, impact">Évaluations : étude de base, mi-parcours, finale, impact</option>
-                    <option value="Conception de plans de suivi-évaluation et manuels de procédures">Conception de plans de suivi-évaluation et manuels de procédures</option>
-                    <option value="Collecte de données à grande échelle (enquêtes, audits de données)">Collecte de données à grande échelle (enquêtes, audits de données)</option>
-                    <option value="Développement de tableaux de bord (Power BI, Excel, Kobo/ODK)">Développement de tableaux de bord (Power BI, Excel, Kobo/ODK)</option>
-                    <option value="Renforcement de capacités (formations ciblées pour agents de suivi-évaluation)">Renforcement de capacités (formations ciblées pour agents de suivi-évaluation)</option>
-                  </optgroup>
-                  <optgroup label="Pour les Collectivités locales/Communes/Conseils départementaux et régionaux">
-                    <option disabled aria-hidden="true" value="service-gap-collectivites">&nbsp;</option>
-                    <option value="Mise en place de dispositifs de suivi simples (fiches de suivi, registres, canevas)">Mise en place de dispositifs de suivi simples (fiches de suivi, registres, canevas)</option>
-                    <option value="Diagnostic territorial / diagnostic participatif">Diagnostic territorial / diagnostic participatif</option>
-                    <option value="Formation des agents communaux et élus sur le suivi-évaluation et la redevabilité">Formation des agents communaux et élus sur le suivi-évaluation et la redevabilité</option>
-                    <option value="Conception de bases de données locales (projets, infrastructures, bénéficiaires)">Conception de bases de données locales (projets, infrastructures, bénéficiaires)</option>
-                    <option value="Évaluations participatives (bénéficiaires, focus groups, scorecards)">Évaluations participatives (bénéficiaires, focus groups, scorecards)</option>
-                    <option value="Analyse et visualisation des données">Analyse et visualisation des données</option>
-                  </optgroup>
-                  <optgroup label="Pour les ONGs">
-                    <option disabled aria-hidden="true" value="service-gap-ongs">&nbsp;</option>
-                    <option value="Évaluations externes : base, mi-parcours, finale, capitalisation">Évaluations externes : base, mi-parcours, finale, capitalisation</option>
-                    <option value="Élaboration de plans suivi-évaluation et outils de collecte des données">Élaboration de plans suivi-évaluation et outils de collecte des données</option>
-                    <option value="Digitalisation de la collecte de données (KoboToolbox, ODK, SurveyCTO)">Digitalisation de la collecte de données (KoboToolbox, ODK, SurveyCTO)</option>
-                    <option value="Développement de tableaux de bord et reporting automatisé">Développement de tableaux de bord et reporting automatisé</option>
-                    <option value="Appui à la gestion axée sur les résultats (GAR/RBM)">Appui à la gestion axée sur les résultats (GAR/RBM)</option>
-                    <option value="Études qualitatives (KII, FGD, études de cas)">Études qualitatives (KII, FGD, études de cas)</option>
-                    <option value="Analyse et visualisation des données">Analyse et visualisation des données</option>
-                    <option value="Capitalisation et documentation de bonnes pratiques">Capitalisation et documentation de bonnes pratiques</option>
-                    <option value="Coaching du responsable du suivi-évaluation et renforcement de l’équipe terrain">Coaching du responsable du suivi-évaluation et renforcement de l’équipe terrain</option>
-                  </optgroup>
-                  <optgroup label="Pour les Associations de développement communautaire / Organisations locales">
-                    <option disabled aria-hidden="true" value="service-gap-associations">&nbsp;</option>
-                    <option value="Conception d’un dispositif de suivi-évaluation simplifié (adapté au terrain)">Conception d’un dispositif de suivi-évaluation simplifié (adapté au terrain)</option>
-                    <option value="Élaboration d’indicateurs simples (réalisations, bénéficiaires, changements)">Élaboration d’indicateurs simples (réalisations, bénéficiaires, changements)</option>
-                    <option value="Appui à la collecte de données communautaires">Appui à la collecte de données communautaires</option>
-                    <option value="Formation et coaching pratiques (comment suivre, comment remplir des fiches)">Formation et coaching pratiques (comment suivre, comment remplir des fiches)</option>
-                    <option value="Mise en place de fiches de suivi et registres bénéficiaires">Mise en place de fiches de suivi et registres bénéficiaires</option>
-                    <option value="Analyse et visualisation des données">Analyse et visualisation des données</option>
-                    <option value="Appui à la rédaction de rapports narratifs et financiers liés aux résultats">Appui à la rédaction de rapports narratifs et financiers liés aux résultats</option>
-                    <option value="Capitalisation des histoires de changement (« Most Significant Change »)">Capitalisation des histoires de changement (« Most Significant Change »)</option>
-                  </optgroup>
-                  <optgroup label="Pour Individus / Consultants / Professionnels (freelance, cadres projet, agents de suivi-évaluation)">
-                    <option disabled aria-hidden="true" value="service-gap-individus">&nbsp;</option>
-                    <option value="Formations professionnelles (suivi-évaluation, GAR, indicateurs SMART)">Formations professionnelles (suivi-évaluation, GAR, indicateurs SMART)</option>
-                    <option value="Coaching individuel">Coaching individuel</option>
-                    <option value="Modèles prêts à l’emploi : cadre logique, plan de suivi-évaluation">Modèles prêts à l’emploi : cadre logique, plan de suivi-évaluation</option>
-                    <option value="Formation et paramétrage KoboToolbox / ODK">Formation et paramétrage KoboToolbox / ODK</option>
-                    <option value="Création de dashboards et reporting automatisé">Création de dashboards et reporting automatisé</option>
-                    <option value="Appui à la rédaction de TDR d’évaluation">Appui à la rédaction de TDR d’évaluation</option>
-                    <option value="Mentorat sur la conduite d’évaluations (plan d’échantillonnage, analyse et visualisation des données)">Mentorat sur la conduite d’évaluations (plan d’échantillonnage, analyse et visualisation des données)</option>
-                  </optgroup>
-                </select>
+                  {serviceGroups.map((group) => (
+                    <fieldset className="service-option-group" key={group.label}>
+                      <legend>{group.label}</legend>
+                      <div className="service-option-list">
+                        {group.options.map((service) => {
+                          const isSelected = form.service.includes(service);
+                          const isDisabled = !isSelected && hasReachedServiceLimit;
+
+                          return (
+                            <label
+                              className={`service-option${isSelected ? ' service-option-selected' : ''}${isDisabled ? ' service-option-disabled' : ''}`}
+                              key={service}
+                            >
+                              <input
+                                type="checkbox"
+                                name="service"
+                                value={service}
+                                checked={isSelected}
+                                disabled={isDisabled}
+                                onChange={() => handleServiceToggle(service)}
+                              />
+                              <span>{service}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </fieldset>
+                  ))}
+                </div>
                 {errors.service && <span className="field-error" id="service-error">{errors.service}</span>}
               </div>
             <div className="form-group">
