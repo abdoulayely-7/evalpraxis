@@ -1,7 +1,7 @@
 export default function Equipe() {
   const members = [
     {
-      name: "M C",
+      name: "Spécialiste Suivi-Évaluation",
       role: "Fondateur & Directeur Exécutif",
       initials: "MC",
       bio: "Expert en suivi-évaluation et renforcement de capacités organisationnelles.",
