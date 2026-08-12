@@ -1387,7 +1387,7 @@ footer {
   gap: 1rem;
 }
 .footer-logo img {
-  height: 100px;
+  height: 80px;
   width: auto;
   object-fit: contain;
   opacity: 0.8;
